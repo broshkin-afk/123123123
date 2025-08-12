@@ -16,7 +16,7 @@ input,select,textarea{background:#0e0e15;border:1px solid #232334;color:var(--te
 textarea{width:100%;min-height:80px}
 button{padding:10px 14px;border-radius:10px;border:0;background:#2a2a3b;color:var(--text);cursor:pointer}
 button + button{margin-left:8px}
-button.primary{background:var(--primary)}
+button.primary{background:var(--primary);color:#0b0b0b}
 button.danger{background:var(--danger)}
 .template-header{display:flex;justify-content:space-between;align-items:center}
 .symbol{color:var(--muted)}

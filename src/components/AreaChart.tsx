@@ -9,8 +9,8 @@ type Props = {
   fill?: string;
 };
 
-export default function AreaChart({ points, height = 220, stroke = '#6a5cff', fill = 'rgba(106,92,255,0.25)' }: Props) {
-  const width = 720;
+export default function AreaChart({ points, height = 360, stroke = '#6a5cff', fill = 'rgba(106,92,255,0.25)' }: Props) {
+  const width = 1000;
   const pad = { top: 24, right: 16, bottom: 36, left: 24 };
   const innerW = width - pad.left - pad.right;
   const innerH = height - pad.top - pad.bottom;

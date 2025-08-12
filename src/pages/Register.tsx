@@ -47,6 +47,7 @@ export default function Register() {
   const [result, setResult] = useState<Result | null>(null);
   const [loading, setLoading] = useState(false);
   const [history, setHistory] = useState<HistoryItem[]>([]);
+  const [historySort, setHistorySort] = useState<'date_desc' | 'date_asc' | 'pnl_desc' | 'pnl_asc'>('date_desc');
 
   const selected = useMemo(() => templates.find(t => t.id === templateId), [templates, templateId]);
   const fmt = useMemo(() => new Intl.DateTimeFormat('en-GB', {
@@ -54,6 +55,20 @@ export default function Register() {
     year: 'numeric', month: '2-digit', day: '2-digit',
     hour: '2-digit', minute: '2-digit'
   }), []);
+
+  const sortedHistory = useMemo(() => {
+    const arr = history.slice();
+    return arr.sort((a, b) => {
+      if (historySort === 'date_desc' || historySort === 'date_asc') {
+        const ad = (a as any).createdAt ?? 0;
+        const bd = (b as any).createdAt ?? 0;
+        return historySort === 'date_desc' ? (bd - ad) : (ad - bd);
+      }
+      const ap = (a as any).pnlSol ?? ((a as any).pnlLamports ?? 0) / 1_000_000_000;
+      const bp = (b as any).pnlSol ?? ((b as any).pnlLamports ?? 0) / 1_000_000_000;
+      return historySort === 'pnl_desc' ? (bp - ap) : (ap - bp);
+    });
+  }, [history, historySort]);
 
   const mapToApi = useCallback((u?: string) => {
     if (!u) return u as any;
@@ -206,9 +221,20 @@ export default function Register() {
       </div>
 
       <div className="card space">
-        <h2>History</h2>
+        <div className="row space" style={{ justifyContent: 'space-between', alignItems: 'center' }}>
+          <h2 style={{ margin: 0 }}>History</h2>
+          <div className="row small">
+            <label>Sort</label>
+            <select value={historySort} onChange={e => setHistorySort(e.target.value as any)}>
+              <option value="date_desc">Date: New → Old</option>
+              <option value="date_asc">Date: Old → New</option>
+              <option value="pnl_desc">Profit: High → Low</option>
+              <option value="pnl_asc">Profit: Low → High</option>
+            </select>
+          </div>
+        </div>
         <div className="grid">
-          {history.map((x, i) => (
+          {sortedHistory.map((x, i) => (
             <div className="card" key={x.createSignature + i}>
               <div className="small" style={{ marginBottom: 6 }}>
                 {(() => {
