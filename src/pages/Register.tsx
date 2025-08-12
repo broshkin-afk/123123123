@@ -189,7 +189,7 @@ export default function Register() {
       </div>
 
       <div className="card space">
-        <h2>История</h2>
+        <h2>History</h2>
         <div className="grid">
           {history.map((x, i) => (
             <div className="card" key={x.createSignature + i}>
@@ -200,8 +200,8 @@ export default function Register() {
               <div className="row small gap link-row">
                 <a href={x.pumpUrl} target="_blank" rel="noreferrer"><span className="icon link" />Pump</a>
                 <a href={x.solscanUrl} target="_blank" rel="noreferrer"><span className="icon link" />Solscan</a>
-                <a href={`https://solscan.io/tx/${x.createSignature}`} target="_blank" rel="noreferrer"><span className="icon link" />Create</a>
-                <a href={`https://solscan.io/tx/${x.sellSignature}`} target="_blank" rel="noreferrer"><span className="icon link" />Sell</a>
+                <a href={`https://solscan.io/tx/${x.createSignature}`} target="_blank" rel="noreferrer"><span className="icon link" />Create tx</a>
+                <a href={`https://solscan.io/tx/${x.sellSignature}`} target="_blank" rel="noreferrer"><span className="icon link" />Sell tx</a>
               </div>
             </div>
           ))}

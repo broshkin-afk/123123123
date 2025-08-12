@@ -141,22 +141,22 @@ export default function Templates() {
     <div className="container board-theme">
       <AppHeader />
 
-      <h1>Создать шаблон</h1>
+      <h1>Create template</h1>
       <div className="card space">
         {loading && (
           <div className="overlay"><div className="spinner lg" /></div>
         )}
         <div className="row space">
           <div className="field" style={{ flex: 1 }}>
-            <label>Название</label>
+            <label>Name</label>
             <input placeholder="Coin name" value={form.name || ''} onChange={e => setForm({ ...form, name: e.target.value })} disabled={loading} />
           </div>
           <div className="field" style={{ flex: 1 }}>
-            <label>Тикер</label>
+            <label>Symbol</label>
             <input placeholder="Ticker" value={form.symbol || ''} onChange={e => setForm({ ...form, symbol: e.target.value.toUpperCase() })} disabled={loading} />
           </div>
         </div>
-         <div className="field"><label>Описание</label><textarea placeholder="Description" value={form.description || ''} onChange={e => setForm({ ...form, description: e.target.value })} disabled={loading} /></div>
+         <div className="field"><label>Description</label><textarea placeholder="Description" value={form.description || ''} onChange={e => setForm({ ...form, description: e.target.value })} disabled={loading} /></div>
         <div className="row space">
           <div className="field" style={{ flex: 1 }}><label>Twitter</label><input placeholder="https://twitter.com/..." value={form.twitter || ''} onChange={e => setForm({ ...form, twitter: e.target.value })} disabled={loading} /></div>
           <div className="field" style={{ flex: 1 }}><label>Telegram</label><input placeholder="https://t.me/..." value={form.telegram || ''} onChange={e => setForm({ ...form, telegram: e.target.value })} disabled={loading} /></div>
@@ -164,19 +164,19 @@ export default function Templates() {
         </div>
         <div className="row space">
           <div className="field" style={{ flex: 1 }}>
-            <label>Изображение</label>
+            <label>Image</label>
             <input type="file" accept="image/*" onChange={e => onFile(e, 'imageUrl')} disabled={loading} />
             {imagePreview ? <img alt="preview" src={ensureHttp(mapAssetUrl(imagePreview))} className="preview" /> : null}
           </div>
           <div className="field" style={{ flex: 1 }}>
-            <label>Баннер</label>
+            <label>Banner</label>
             <input type="file" accept="image/*" onChange={e => onFile(e, 'bannerUrl')} disabled={loading} />
             {bannerPreview ? <img alt="banner" src={ensureHttp(mapAssetUrl(bannerPreview))} className="preview banner" /> : null}
           </div>
         </div>
         <div className="row space">
           <button onClick={submit} className="primary" disabled={loading}>Save template</button>
-          <button onClick={removeAll} className="danger" disabled={loading}>Удалить все</button>
+          <button onClick={removeAll} className="danger" disabled={loading}>Delete all</button>
         </div>
       </div>
 

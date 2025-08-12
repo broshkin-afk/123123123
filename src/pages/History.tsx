@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 
@@ -32,6 +32,12 @@ export default function History() {
   };
   useEffect(() => { load(); }, []);
 
+  const fmt = useMemo(() => new Intl.DateTimeFormat('en-GB', {
+    timeZone: 'Europe/Moscow',
+    year: 'numeric', month: '2-digit', day: '2-digit',
+    hour: '2-digit', minute: '2-digit'
+  }), []);
+
   return (
     <div className="container">
       <header className="nav">
@@ -57,11 +63,12 @@ export default function History() {
               <div className="name">{x.name} <span className="symbol">({x.symbol})</span></div>
               <div className={x.pnlLamports >= 0 ? 'green' : 'red'}>{x.pnlLamports}</div>
             </div>
+            <div className="small" style={{ marginBottom: 8 }}>Created (MSK): {fmt.format(new Date(x.createdAt))}</div>
             <div className="row small">
-              <a href={x.pumpUrl} target="_blank">Pump</a>
-              <a href={x.solscanUrl} target="_blank">Solscan</a>
-              <a href={`https://solscan.io/tx/${x.createSignature}`} target="_blank">Create</a>
-              <a href={`https://solscan.io/tx/${x.sellSignature}`} target="_blank">Sell</a>
+              <a href={x.pumpUrl} target="_blank" rel="noreferrer"><span className="icon link" />Pump</a>
+              <a href={x.solscanUrl} target="_blank" rel="noreferrer"><span className="icon link" />Solscan</a>
+              <a href={`https://solscan.io/tx/${x.createSignature}`} target="_blank" rel="noreferrer"><span className="icon link" />Create tx</a>
+              <a href={`https://solscan.io/tx/${x.sellSignature}`} target="_blank" rel="noreferrer"><span className="icon link" />Sell tx</a>
             </div>
             <div className="row small">
               <div>Spent: {x.spentLamports}</div>
