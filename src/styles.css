@@ -1,0 +1,73 @@
+:root{--bg:hsl(230 12.5% 9.41%);--card:#10101a;--text:#f5f6fb;--muted:#8b90a0;--primary:hsl(141.67 77.14% 72.55%);--danger:#ff5b6e;--green:#32cd75;--border:#1c1c2a}
+*{box-sizing:border-box}
+html,body,#root{height:100%}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,Arial}
+a{color:var(--primary);text-decoration:none}
+.container{max-width:1200px;margin:0 auto;padding:24px}
+.nav{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px}
+.nav .brand{font-weight:700;font-size:20px}
+.nav nav.gap{display:flex;gap:16px}
+.card{background:var(--card);border-radius:14px;padding:16px;margin-bottom:18px;border:1px solid var(--border);position:relative}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:14px}
+.row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.row.space{margin-bottom:12px}
+.small{font-size:12px;color:var(--muted)}
+input,select,textarea{background:#0e0e15;border:1px solid #232334;color:var(--text);padding:10px;border-radius:10px;outline:none}
+textarea{width:100%;min-height:80px}
+button{padding:10px 14px;border-radius:10px;border:0;background:#2a2a3b;color:var(--text);cursor:pointer}
+button + button{margin-left:8px}
+button.primary{background:var(--primary)}
+button.danger{background:var(--danger)}
+.template-header{display:flex;justify-content:space-between;align-items:center}
+.symbol{color:var(--muted)}
+.green{color:var(--green)}
+.red{color:var(--danger)}
+.board-theme .card{background:linear-gradient(180deg,#10101a 0%,#0d0d16 100%)}
+.field{display:flex;flex-direction:column;gap:6px;min-width:160px}
+.field label{font-size:12px;color:var(--muted)}
+.preview{max-width:180px;border-radius:10px;border:1px solid var(--border)}
+.preview.banner{max-width:320px}
+.divider{height:1px;background:var(--border);margin:14px 0}
+.table{width:100%;border-collapse:collapse}
+.table th,.table td{padding:10px;border-bottom:1px solid var(--border)}
+.table th{color:var(--muted);font-weight:600;text-align:left}
+
+.bottom-nav{position:fixed;z-index:20;left:0;right:0;bottom:0;background:#0f0f16cc;border-top:1px solid var(--border);backdrop-filter:blur(8px)}
+.bottom-nav .wrap{display:flex;justify-content:space-around;padding:10px}
+.bottom-nav a{display:flex;flex-direction:column;align-items:center;gap:6px;color:var(--muted)}
+.bottom-nav a.active{color:var(--primary)}
+.icon{width:20px;height:20px;display:inline-block;border-radius:6px;background:var(--muted)}
+.icon.link{background:var(--primary)}
+.icon.menu{background:#666}
+.link-row{display:flex;gap:10px;align-items:center}
+.card-actions{position:relative}
+.card-actions .menu{position:absolute;right:0;top:24px;background:var(--card);border:1px solid var(--border);border-radius:8px;min-width:140px;display:flex;flex-direction:column;overflow:hidden}
+.card-actions .menu button{background:transparent;border:0;text-align:left;padding:10px 12px}
+.card-actions .menu button:hover{background:#1a1a2a} 
+.field input,.field textarea,.field select{width:100%}
+.row.space button{margin-right:8px}
+.link-row a{display:inline-flex;align-items:center;gap:6px}
+.bottom-nav .wrap a{gap:4px;font-size:12px} 
+.card{position:relative}
+.action-btn{position:absolute;top:10px;right:10px;background:transparent;border:0;padding:4px;border-radius:8px;display:grid;place-items:center}
+.action-menu{position:absolute;top:36px;right:10px;background:var(--card);border:1px solid var(--border);border-radius:8px;min-width:140px;overflow:hidden}
+.action-menu button{display:block;width:100%;background:transparent;border:0;text-align:left;padding:10px 12px}
+.action-menu button:hover{background:#1a1a2a}
+
+.card button{margin-top:8px}
+.card .row.space button{margin-top:0} 
+
+/* Toasts */
+.toast-container{position:fixed;right:16px;bottom:16px;display:flex;flex-direction:column;gap:8px;z-index:1000}
+.toast{background:#1a1a2a;border:1px solid var(--border);padding:10px 12px;border-radius:10px;min-width:220px;box-shadow:0 6px 20px rgba(0,0,0,0.3)}
+.toast.success{border-color:var(--green)}
+.toast.error{border-color:var(--danger)}
+.toast.info{border-color:var(--primary)}
+
+/* Loading spinner */
+.spinner{width:24px;height:24px;border:3px solid var(--border);border-top-color:var(--primary);border-radius:50%;animation:spin .8s linear infinite}
+.spinner.lg{width:42px;height:42px;border-width:4px}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* Overlay for blocking content */
+.overlay{position:absolute;inset:0;display:grid;place-items:center;background:rgba(0,0,0,0.28);z-index:10;border-radius:inherit}
