@@ -8,6 +8,7 @@ import Settings from './pages/Settings';
 import BottomNav from './components/BottomNav';
 import './styles.css';
 import { ToastProvider } from './components/Toast';
+import TgGate from './components/TgGate';
 
 function Shell({ element }: { element: React.ReactNode }) {
   return (
@@ -28,7 +29,9 @@ const router = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <ToastProvider>
-      <RouterProvider router={router} />
+      <TgGate>
+        <RouterProvider router={router} />
+      </TgGate>
     </ToastProvider>
   </React.StrictMode>
 ); 
