@@ -1,0 +1,7 @@
+{
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "https://api.luthara.tech/api/$1" },
+    { "source": "/uploads/(.*)", "destination": "https://api.luthara.tech/uploads/$1" }
+  ]
+}
+
