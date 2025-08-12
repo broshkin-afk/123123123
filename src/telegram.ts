@@ -9,7 +9,11 @@ export type TgUser = {
 export function getTelegramUser(): TgUser {
   try {
     const w = window as any;
-    const user = w?.Telegram?.WebApp?.initDataUnsafe?.user;
+    const webApp = w?.Telegram?.WebApp;
+    if (webApp?.ready) {
+      try { webApp.ready(); } catch {}
+    }
+    const user = webApp?.initDataUnsafe?.user;
     return user || null;
   } catch {
     return null;
