@@ -2,6 +2,7 @@ import { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
 import AppHeader from '../components/AppHeader';
 import { DotsIcon, TwitterIcon, TelegramIcon, GlobeIcon, PencilIcon } from '../components/icons';
+import ImageWithLoader from '../components/ImageWithLoader';
 import { useToast } from '../components/Toast';
 
 type Template = {
@@ -166,12 +167,12 @@ export default function Templates() {
           <div className="field" style={{ flex: 1 }}>
             <label>Image</label>
             <input type="file" accept="image/*" onChange={e => onFile(e, 'imageUrl')} disabled={loading} />
-            {imagePreview ? <img alt="preview" src={ensureHttp(mapAssetUrl(imagePreview))} className="preview" /> : null}
+            {imagePreview ? <ImageWithLoader src={ensureHttp(mapAssetUrl(imagePreview))!} alt="preview" /> : null}
           </div>
           <div className="field" style={{ flex: 1 }}>
             <label>Banner</label>
             <input type="file" accept="image/*" onChange={e => onFile(e, 'bannerUrl')} disabled={loading} />
-            {bannerPreview ? <img alt="banner" src={ensureHttp(mapAssetUrl(bannerPreview))} className="preview banner" /> : null}
+            {bannerPreview ? <ImageWithLoader src={ensureHttp(mapAssetUrl(bannerPreview))!} alt="banner" placeholderHeight={220} /> : null}
           </div>
         </div>
         <div className="row space">
@@ -189,7 +190,7 @@ export default function Templates() {
       <div className="grid">
         {list.map(t => (
           <div key={t.id} className="card space">
-            {t.imageUrl ? <img alt="thumb" src={ensureHttp(mapAssetUrl(t.imageUrl))} style={{ width: '100%', borderRadius: 10, border: '1px solid var(--border)', marginBottom: 8 }} /> : null}
+            {t.imageUrl ? <ImageWithLoader src={ensureHttp(mapAssetUrl(t.imageUrl))!} alt="thumb" /> : null}
             <button className="action-btn" onClick={() => setOpenMenuId(openMenuId === t.id ? null : t.id)} disabled={loading}><DotsIcon /></button>
             {openMenuId === t.id && (
               <div className="action-menu">
@@ -206,7 +207,7 @@ export default function Templates() {
               {t.telegram ? <a href={ensureHttp(t.telegram)} target="_blank" rel="noreferrer"><TelegramIcon />Telegram</a> : null}
               {t.website ? <a href={ensureHttp(t.website)} target="_blank" rel="noreferrer"><GlobeIcon />Website</a> : null}
             </div>
-            {t.bannerUrl ? <img alt="banner" src={ensureHttp(mapAssetUrl(t.bannerUrl))} style={{ width: '100%', borderRadius: 10, border: '1px solid var(--border)' }} /> : null}
+            {t.bannerUrl ? <ImageWithLoader src={ensureHttp(mapAssetUrl(t.bannerUrl))!} alt="banner" placeholderHeight={220} /> : null}
 
             {editId === t.id && (
               <div className="card" style={{ marginTop: 12 }}>

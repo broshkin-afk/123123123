@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useState, useCallback } from 'react';
 import axios from 'axios';
 import AppHeader from '../components/AppHeader';
+import ImageWithLoader from '../components/ImageWithLoader';
+import { CopyIcon } from '../components/icons';
 import { useToast } from '../components/Toast';
 
 type Template = { id: string; name: string; symbol: string; imageUrl?: string };
@@ -17,7 +19,17 @@ type Result = {
 };
 
 type HistoryItem = {
-  name: string; symbol: string; pumpUrl: string; solscanUrl: string; createSignature: string; sellSignature: string; pnlLamports: number; spentSol?: number; receivedSol?: number; pnlSol?: number;
+  name: string;
+  symbol: string;
+  pumpUrl: string;
+  solscanUrl: string;
+  createSignature: string;
+  sellSignature: string;
+  pnlLamports: number;
+  spentSol?: number;
+  receivedSol?: number;
+  pnlSol?: number;
+  createdAt?: number;
 };
 
 export default function Register() {
@@ -37,6 +49,11 @@ export default function Register() {
   const [history, setHistory] = useState<HistoryItem[]>([]);
 
   const selected = useMemo(() => templates.find(t => t.id === templateId), [templates, templateId]);
+  const fmt = useMemo(() => new Intl.DateTimeFormat('en-GB', {
+    timeZone: 'Europe/Moscow',
+    year: 'numeric', month: '2-digit', day: '2-digit',
+    hour: '2-digit', minute: '2-digit'
+  }), []);
 
   const mapToApi = useCallback((u?: string) => {
     if (!u) return u as any;
@@ -119,12 +136,12 @@ export default function Register() {
   return (
     <div className="container board-theme">
       <AppHeader />
-
+      <h1>Register token</h1>
       <div className="card space">
         {(initialLoading || loading) && (
           <div className="overlay"><div className="spinner lg" /></div>
         )}
-        <h2>Регистрация токена</h2>
+        
 
         <div className="row space">
           <button className={mode === 'template' ? 'primary' : ''} onClick={() => setMode('template')} disabled={initialLoading || loading}>Template</button>
@@ -136,7 +153,7 @@ export default function Register() {
             <h3>Use template</h3>
             <div className="row space">
               <div className="field" style={{ flex: 1 }}>
-                <label>Шаблон</label>
+                <label>Template</label>
                 <select value={templateId} onChange={e => setTemplateId(e.target.value)} disabled={initialLoading || loading}>
                   {templates.map(t => <option key={t.id} value={t.id}>{t.name} ({t.symbol})</option>)}
                 </select>
@@ -146,7 +163,7 @@ export default function Register() {
               <div className="field" style={{ flex: 1 }}><label>Priority fee (SOL)</label><input type="number" step="0.00001" value={priorityFee} onChange={e => setPriorityFee(parseFloat(e.target.value))} disabled={initialLoading || loading} /></div>
               <div className="field" style={{ flex: 1 }}><label>Sell (%)</label><input value={sellPercentage} onChange={e => setSellPercentage(e.target.value)} disabled={initialLoading || loading} /></div>
             </div>
-            {selected?.imageUrl ? <img alt="preview" src={mapToApi(selected.imageUrl)} className="preview" /> : null}
+            {selected?.imageUrl ? <ImageWithLoader alt="preview" src={mapToApi(selected.imageUrl)!} /> : null}
             <div style={{ position: 'relative' }}>
               <button onClick={submitTemplate} className="primary" disabled={initialLoading || loading}>{loading ? 'Processing...' : 'Create from template'}</button>
               {loading && (
@@ -170,7 +187,7 @@ export default function Register() {
             <div className="field" style={{ flex: 1 }}>
               <label>Image</label>
               <input type="file" accept="image/*" onChange={onAdhocFile} disabled={initialLoading || loading} />
-              {adhocImagePreview ? <img alt="preview" src={mapToApi(adhocImagePreview)} className="preview" /> : null}
+              {adhocImagePreview ? <ImageWithLoader alt="preview" src={mapToApi(adhocImagePreview)!} /> : null}
             </div>
             <div className="row space">
               <div className="field" style={{ flex: 1 }}><label>Dev buy (SOL)</label><input type="number" step="0.01" value={devBuySol} onChange={e => setDevBuySol(parseFloat(e.target.value))} disabled={initialLoading || loading} /></div>
@@ -193,15 +210,42 @@ export default function Register() {
         <div className="grid">
           {history.map((x, i) => (
             <div className="card" key={x.createSignature + i}>
+              <div className="small" style={{ marginBottom: 6 }}>
+                {(() => {
+                  const raw = (x as any).createdAt;
+                  const n = typeof raw === 'number' ? raw : Number(raw);
+                  if (!Number.isFinite(n)) return 'Created (MSK): -';
+                  const ms = n < 1_000_000_000_000 ? n * 1000 : n;
+                  return `Created (MSK): ${fmt.format(new Date(ms))}`;
+                })()}
+              </div>
               <div className="template-header">
-                <div className="name">{x.name} <span className="symbol">({x.symbol})</span></div>
+                <div className="name" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <button
+                    onClick={() => { navigator.clipboard.writeText((x as any).mint); notify({ type: 'success', message: 'CA copied' }); }}
+                    title="Copy CA"
+                    style={{ background: 'transparent', border: 0, padding: 0, cursor: 'pointer' }}
+                  >
+                    <CopyIcon />
+                  </button>
+                  {x.name} <span className="symbol">({x.symbol})</span>
+                </div>
                 <div className={x.pnlSol && x.pnlSol >= 0 ? 'green' : 'red'}>{(x.pnlSol ?? x.pnlLamports/1_000_000_000).toFixed(4)} SOL</div>
               </div>
-              <div className="row small gap link-row">
-                <a href={x.pumpUrl} target="_blank" rel="noreferrer"><span className="icon link" />Pump</a>
-                <a href={x.solscanUrl} target="_blank" rel="noreferrer"><span className="icon link" />Solscan</a>
-                <a href={`https://solscan.io/tx/${x.createSignature}`} target="_blank" rel="noreferrer"><span className="icon link" />Create tx</a>
-                <a href={`https://solscan.io/tx/${x.sellSignature}`} target="_blank" rel="noreferrer"><span className="icon link" />Sell tx</a>
+              <div className="row small" style={{ marginTop: 4 }}>
+                {(() => {
+                  const buy = (x as any).spentSol ?? x.pnlLamports === undefined ? undefined : (x as any).spentSol;
+                  const buyVal = (x as any).spentSol ?? x.pnlLamports === undefined ? 0 : (x as any).spentSol;
+                  const buyCalc = (x as any).spentSol ?? (x as any).spentLamports ? ((x as any).spentSol ?? (x as any).spentLamports / 1_000_000_000) : 0;
+                  const sellCalc = (x as any).receivedSol ?? (x as any).receivedLamports ? ((x as any).receivedSol ?? (x as any).receivedLamports / 1_000_000_000) : 0;
+                  return <span>Dev buy: {buyCalc.toFixed(4)} SOL · Dev sell: {sellCalc.toFixed(4)} SOL</span>;
+                })()}
+              </div>
+              <div className="row small gap" style={{ marginTop: 10 }}>
+                <a href={x.pumpUrl} target="_blank" rel="noreferrer">Pump</a>
+                <a href={x.solscanUrl} target="_blank" rel="noreferrer">Solscan</a>
+                <a href={`https://solscan.io/tx/${x.createSignature}`} target="_blank" rel="noreferrer">Create tx</a>
+                <a href={`https://solscan.io/tx/${x.sellSignature}`} target="_blank" rel="noreferrer">Sell tx</a>
               </div>
             </div>
           ))}

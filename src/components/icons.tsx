@@ -79,3 +79,12 @@ export function PencilIcon(props: React.SVGProps<SVGSVGElement>) {
     </svg>
   );
 } 
+
+export function CopyIcon(props: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" {...props}>
+      <rect x="9" y="9" width="13" height="13" rx="2" />
+      <rect x="2" y="2" width="13" height="13" rx="2" />
+    </svg>
+  );
+}

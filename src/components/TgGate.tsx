@@ -8,6 +8,10 @@ const allowedIds = new Set<number>([282063428, 432156014]);
 
 export default function TgGate({ children }: Props) {
   const { notify } = useToast();
+  // Bypass gate in local dev (vite dev server)
+  if (import.meta.env.DEV) {
+    return <>{children}</>;
+  }
   const [status, setStatus] = useState<'loading' | 'allowed' | 'denied'>('loading');
 
   useEffect(() => {
